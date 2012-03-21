@@ -29,36 +29,34 @@ process.on('uncaughtException', function(error) {
 });
 
 
-    // Process command line args.
-    var cwd = process.cwd();
-    var options = {
-        cluster: false,
-        port: process.env.VCAP_APP_PORT || 3000,
-        monPort: 3001,
-        config: cwd + '/config/dev.json',
-        tables: cwd + '/tables',
-        routes: cwd + '/routes',
-        xformers: cwd + '/config/xformers.json',
-        disableConsole: false,
-        disableQ: false,
-        noWorkers: 2,
-        ecv: {
-            monitor: '/tables',
-            validator: function(status, headers, data) {
-                return JSON.parse(data);
-            }
+// Process command line args.
+var cwd = process.cwd();
+var options = {
+    cluster: false,
+    port: process.env.VCAP_APP_PORT || 3000,
+    monPort: 3001,
+    config: cwd + '/config/dev.json',
+    tables: cwd + '/tables',
+    routes: cwd + '/routes',
+    xformers: cwd + '/config/xformers.json',
+    disableConsole: false,
+    disableQ: false,
+    noWorkers: 2,
+    ecv: {
+        monitor: '/tables',
+        validator: function (status, headers, data) {
+            return JSON.parse(data);
         }
-    };
+    }
+};
 
-    var emitter;
-    cluster2.listen(options, function(cb2) {
-        createConsole(options, function(app, e) {
-            emitter = e;
-            cb2(app);
-        })
-    }, function(app) {
-    });
-
+var emitter;
+cluster2.listen(options, function (cb2) {
+    createConsole(options, function (app, e) {
+        emitter = e;
+        cb2(app);
+    })
+});
 
 function createConsole(options, cb) {
     return new Console({
