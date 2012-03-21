@@ -41,7 +41,6 @@ var options = {
     xformers: cwd + '/config/xformers.json',
     disableConsole: false,
     disableQ: false,
-    noWorkers: 2,
     ecv: {
         monitor: '/tables',
         validator: function (status, headers, data) {
