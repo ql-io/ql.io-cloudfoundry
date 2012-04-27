@@ -16,7 +16,7 @@
 
 'use strict';
 
-var cluster2 = require('cluster2'),
+var Cluster = require('cluster2'),
     os = require('os'),
     _ = require('underscore'),
     Console = require('ql.io-console'),
@@ -32,7 +32,7 @@ process.on('uncaughtException', function(error) {
 // Process command line args.
 var cwd = process.cwd();
 var options = {
-    cluster: false,
+    cluster: true,
     port: process.env.VCAP_APP_PORT || 3000,
     monPort: 3001,
     config: cwd + '/config/dev.json',
@@ -50,9 +50,10 @@ var options = {
 };
 
 var emitter;
-cluster2.listen(options, function (cb2) {
+var c = new Cluster(options);
+c.listen(function (cb2) {
     createConsole(options, function (app, e) {
-        emitter = e;
+            emitter = e;
         cb2(app);
     })
 });
